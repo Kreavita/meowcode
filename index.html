@@ -15,11 +15,11 @@
   </head>
   <body>
     <div class="container">
-      <div class="row">
+      <div class="row align-items-center">
         <div class="col-md-12 mb-3">
           <h1>Meow Encoder/Decoder</h1>
         </div>
-        <div class="col-md-12 mb-3">
+        <div class="col-md-11 mb-3">
           <label for="input">UTF8 Text / Meowcode Input:</label>
           <textarea
             id="input"
@@ -27,6 +27,11 @@
             rows="5"
             placeholder="Enter meowcode or text here"
           ></textarea>
+        </div>
+        <div class="col-md-1 mb-3">
+          <button class="btn btn-light" onclick="pasteFromClipboard()">
+            📋 Paste
+          </button>
         </div>
       </div>
       <div class="row">
@@ -39,11 +44,16 @@
           </button>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-12 mb-3">
+      <div class="row align-items-center mb-3">
+        <div class="col-md-11">
           <div class="alert alert-info text-break" id="output">
             <i>The result will be shown here!</i>
           </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <button class="btn btn-light" onclick="copyToClipboard()">
+            📋 Copy
+          </button>
         </div>
       </div>
       <div class="row">
@@ -170,6 +180,17 @@
         const binaryInput = meowToBinary(meowInput);
         const utf8Input = binaryToUTF8(binaryInput);
         document.getElementById("output").innerText = utf8Input;
+      }
+
+      function copyToClipboard() {
+        let output = document.getElementById("output").innerText;
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(output);
+      }
+
+      async function pasteFromClipboard() {
+        let text = await navigator.clipboard.readText();
+        document.getElementById("input").value = text;
       }
     </script>
   </body>
