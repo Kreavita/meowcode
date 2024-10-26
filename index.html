@@ -1,0 +1,176 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <title>Meow Langauge</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <h1>Meow Encoder/Decoder</h1>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label for="input">UTF8 Text / Meowcode Input:</label>
+          <textarea
+            id="input"
+            class="form-control"
+            rows="5"
+            placeholder="Enter meowcode or text here"
+          ></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3 text-center">
+          <button onclick="encodeToMeow()" class="btn btn-success">
+            Encode to Meow 🐈
+          </button>
+          <button onclick="decodeToUTF8()" class="btn btn-primary">
+            Decode to UTF8 🔤
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <div class="alert alert-info text-break" id="output">
+            <i>The result will be shown here!</i>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3 d-flex justify-content-center">
+          <pre>
+                        /^--^\     /^--^\     /^--^\
+                        \____/     \____/     \____/
+                       /      \   /      \   /      \
+                      |        | |        | |        |
+                       \__  __/   \__  __/   \__  __/
+  |^|^|^|^|^|^|^|^|^|^|^|^\ \^|^|^|^/ /^|^|^|^|^\ \^|^|^|^|^|^|^|^|^|^|^|^|
+  | | | | | | | | | | | | |\ \| | |/ /| | | | | | \ \ | | | | | | | | | | |
+  | | | | | | | | | | | | / / | | |\ \| | | | | |/ /| | | | | | | | | | | |
+  | | | | | | | | | | | | \/| | | | \/| | | | | |\/ | | | | | | | | | | | |
+  #########################################################################
+  | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | |
+  | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | |
+          </pre>
+          <!-- https://www.asciiart.eu/animals/cats -->
+        </div>
+      </div>
+    </div>
+
+    <footer
+      class="container-fluid p-2 fixed-bottom text-center text-dark bg-light"
+    >
+      <p class="mb-0">
+        Made with 💜 by
+        <a href="https://http.cat/status/404" class="text-decoration-none"
+          >krea</a
+        >
+      </p>
+    </footer>
+    <script>
+      const mapping = [
+        "meow",
+        "mewo",
+        "moew",
+        "mowe",
+        "mweo",
+        "mwoe",
+        "emow",
+        "emwo",
+        "eomw",
+        "eowm",
+        "ewmo",
+        "ewom",
+        "omew",
+        "omwe",
+        "oemw",
+        "oewm",
+        "owme",
+        "owem",
+        "wmeo",
+        "wmoe",
+        "wemo",
+        "weom",
+        "wome",
+        "woem",
+      ];
+      // Convert string to binary
+      function utf8ToBinary(str) {
+        return str
+          .split("")
+          .map((char) => char.charCodeAt(0).toString(2).padStart(8, 0))
+          .join("");
+      }
+
+      // Convert binary to string
+      function binaryToUTF8(str) {
+        return str
+          .match(/[01]{8}/g)
+          .map((byte) => String.fromCharCode(parseInt(byte, 2)))
+          .join("");
+      }
+
+      function binaryToMeow(binary_string) {
+        let encoded_string = "";
+        for (let i = 0; i < binary_string.length; i += 4) {
+          const binary_substring = parseInt(
+            binary_string.substring(i, i + 4),
+            2
+          );
+          if (binary_substring < mapping.length) {
+            encoded_string += mapping[binary_substring];
+          } else {
+            console.log(`Invalid binary substring: ${binary_substring}`);
+            break;
+          }
+        }
+
+        return encoded_string;
+      }
+
+      function meowToBinary(meow_string) {
+        let decoded_string = "";
+        for (let i = 0; i < meow_string.length; i += 4) {
+          const meow_substring = meow_string.substring(i, i + 4);
+          if (mapping.includes(meow_substring)) {
+            decoded_string += mapping
+              .indexOf(meow_substring)
+              .toString(2)
+              .padStart(4, 0);
+          } else {
+            console.log(`Invalid meow substring: ${meow_substring}`);
+            break;
+          }
+        }
+
+        return decoded_string;
+      }
+      // Encode to Meow language
+      function encodeToMeow() {
+        const binaryInput = utf8ToBinary(
+          document.getElementById("input").value.trim()
+        );
+        const meowInput = binaryToMeow(binaryInput);
+        document.getElementById("output").innerText = meowInput;
+      }
+
+      // Decode from Meow language
+      function decodeToUTF8() {
+        const meowInput = document.getElementById("input").value.trim();
+        const binaryInput = meowToBinary(meowInput);
+        const utf8Input = binaryToUTF8(binaryInput);
+        document.getElementById("output").innerText = utf8Input;
+      }
+    </script>
+  </body>
+</html>
